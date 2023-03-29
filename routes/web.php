@@ -18,13 +18,16 @@ use App\Http\Controllers\ProductController;
 
 //frontend
 Route::get('/', [HomeController::class, 'index']);
-Route::get('/home', [HomeController::class, 'index']);
+Route::get('/login', [HomeController::class, 'show_login']);
+Route::post('/login', [HomeController::class, 'login']);
+
+
+Route::get('/signup', [HomeController::class, 'show_signup']);
+Route::post('/signup', [HomeController::class, 'signup']);
+Route::get('/logout', [HomeController::class, 'logout']);
 
 //admin
-Route::get('/login', [AdminController::class, 'login']);
-Route::get('/dashboard', [AdminController::class, 'index']);
-Route::post('/dashboard', [AdminController::class, 'dashboard']);
-Route::get('/logout', [AdminController::class, 'logout']);
+Route::get('/dashboard', [AdminController::class, 'index'])->middleware('AdminRole');
 
 //product
 Route::get('/products', [ProductController::class, 'get_list']);

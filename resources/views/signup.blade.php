@@ -29,24 +29,26 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <body>
 <div class="log-w3">
 <div class="w3layouts-main">
-	<h2>Sign In Now</h2>
-	<?php
-	$message = Session::get('message');
-	if($message){
-		echo '<span class="text-alert">' . $message . '</span>';
-		Session::put('message', null);
-	}
-	?>
-		<form action="{{URL::to('/dashboard')}}" method="post">
+	<h2>Sign UP Now</h2>
+		<form action="{{URL::to('/signup')}}" method="post">
 			{{csrf_field()}}
-			<input type="email" class="ggg" name="email" placeholder="E-MAIL" required="">
-			<input type="password" class="ggg" name="password" placeholder="PASSWORD" required="">
-			<span><input type="checkbox" />Remember Me</span>
-			<h6><a href="#">Forgot Password?</a></h6>
+			<label for="name">User name</label><br>
+			<input type="name" id="name" class="ggg" name="name" placeholder="USER Name">
+			<label for="email">HTML</label><br>
+			<input type="email" id="email" class="ggg" name="email" placeholder="E-MAIL">
+			@if($errors->has('email'))
+			<span class="text-alert">{{ $errors->first('email')}}</span>
+			@endif
+			<label for="password">Password?</label><br>
+			<input type="password" id="password" class="ggg" name="password" placeholder="PASSWORD">
+			@if($errors->has('password'))
+			<span class="text-alert">{{ $errors->first('password')}}</span>
+			@endif
+			{{-- <span><input type="checkbox" />Remember Me</span> --}}
 				<div class="clearfix"></div>
-				<input type="submit" value="Sign In" name="login">
+				<input type="submit" value="Sign Up" name="signup">
 		</form>
-		<p>Don't Have an Account ?<a href="registration.html">Create an account</a></p>
+		<p><a href="{{URL::to('/login')}}">Back to log in</a></p>
 </div>
 </div>
 <script src="{{asset('public/backend/js/bootstrap.js')}}"></script>

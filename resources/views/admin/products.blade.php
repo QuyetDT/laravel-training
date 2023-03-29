@@ -40,7 +40,7 @@
                 </thead>
                 <tbody>
                     <?php $i = 1; ?>
-                    <?php foreach ($products as $product) : ?>
+                    @foreach ($products as $product)
                         <tr>
                             <td><?php echo $i; ?></td>
                             <td>{{$product->product_name}}</td>
@@ -48,18 +48,18 @@
                             <td>{{$product->description}}</td>
                             <td>{{$product->status}}</td>
                             <td>
-                                <div class="dropdown">
+                                <!-- <div class="dropdown">
                                     <button class="glyphicon glyphicon-option-vertical btn btn-secondary dropdown-toggle " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="{{URL::to('/edit/'. {{$product->id}}">Edit</a>
-                                        <a class="dropdown-item" href="{{URL::to('/delete')}}">Delete</a>
+                                        <a class="dropdown-item" href="{{URL::to('/edit' . $product->id)}}">Edit</a>
+                                        <a class="dropdown-item" href="{{URL::to('/delete . $product->id)}}">Delete</a>
                                     </div>
-                                </div>
+                                </div> -->
                             </td>
                         </tr>
                         <?php $i++; ?>
-                    <?php endforeach; ?>
+                    @endforeach
                 </tbody>
             </table>
         </div>

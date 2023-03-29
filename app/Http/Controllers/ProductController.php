@@ -14,6 +14,7 @@ class ProductController extends Controller
     public function get_list()
     {
         $products = DB::table('tbl_products')->get();
+        // var_dump($products); die;
         $manager_product = view('admin.products')->with('products', $products);
         return view('admin_layout')->with('admin.products', $manager_product);
     }
