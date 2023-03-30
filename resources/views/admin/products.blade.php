@@ -16,6 +16,11 @@
                 <button class="btn btn-sm btn-default">Apply</button>
             </div>
             <div class="col-sm-4">
+                @if (\Session::has('message'))
+                <div class="text-alert">
+                    {{ \Session::get('message') }}
+                </div>
+            @endif
             </div>
             <div class="col-sm-3">
                 <div class="input-group">
@@ -48,14 +53,14 @@
                             <td>{{$product->description}}</td>
                             <td>{{$product->status}}</td>
                             <td>
-                                <!-- <div class="dropdown">
+                                <div class="dropdown">
                                     <button class="glyphicon glyphicon-option-vertical btn btn-secondary dropdown-toggle " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="{{URL::to('/edit' . $product->id)}}">Edit</a>
-                                        <a class="dropdown-item" href="{{URL::to('/delete . $product->id)}}">Delete</a>
-                                    </div>
-                                </div> -->
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <li><a class="dropdown-item" href="{{URL::to('/edit_product/' . $product->id)}}">Edit</a></li>
+                                        <li><a class="dropdown-item" href="{{URL::to('/delete_product/' . $product->id)}}">Delete</a></li>
+                                    </ul>
+                                </div>
                             </td>
                         </tr>
                         <?php $i++; ?>
