@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Http\Requests;
+// use Illuminate\View\View;
+use App\Http\Requests\ProductRequest;
+use App\Models\Product;
 use Illuminate\Support\Facades\Redirect;
 use DB;
 use Session;
@@ -13,9 +16,8 @@ class ProductController extends Controller
 {
     public function get_list()
     {
-        $products = DB::table('tbl_products')->get();
-        $manager_product = view('admin.products')->with('products', $products);
-        return view('admin_layout')->with('admin.products', $manager_product);
+        $products = Product::get();
+        return view('admin.products')->with('products', $products);
     }
 
     public function add()
@@ -23,14 +25,11 @@ class ProductController extends Controller
         return view('admin.add_product');
     }
 
-    public function create(Request $request)
+    public function create(ProductRequest $request): RedirectResponse
     {
-        $data = [];
-        $data['product_name'] = $request->name;
-        $data['price'] = $request->price;
-        $data['description'] = $request->description;
-        $data['status'] = $request->status;
-        DB::table('tbl_products')->insert($data);
+        $data = $request->validated();
+
+        Product::create($data);
         Session::put('message', 'Create successfully');
         return Redirect::to('/products');
     }   
@@ -42,14 +41,14 @@ class ProductController extends Controller
         return view('admin_layout')->with('admin.edit_product', $view);
     }  
 
-    public function update(Request $request, $product_id)
+    public function update(ProductRequest $request, $product_id)
     {
         $data = [];
         $data['product_name'] = $request->name;
         $data['price'] = $request->price;
         $data['description'] = $request->description;
         $data['status'] = $request->status;
-        DB::table('tbl_products')->where('id', $product_id)->update($data);
+        Product::find($product_id)->update($data);
         Session::put('message', 'Update successfully');
         return Redirect::to('/products');
     }
