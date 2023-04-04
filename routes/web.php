@@ -24,6 +24,8 @@ Route::post('/login', [HomeController::class, 'login']);
 Route::get('/signup', [HomeController::class, 'show_signup']);
 Route::post('/signup', [HomeController::class, 'signup']);
 Route::get('/logout', [HomeController::class, 'logout']);
+Route::get('/add_to_cart/{product_id}', [HomeController::class, 'add_to_cart']);
+Route::get('/shopping_cart', [HomeController::class, 'shopping_cart']);
 
 //admin
 // Route::admin(AdminController::class)->group(function () {
@@ -32,11 +34,11 @@ Route::get('/logout', [HomeController::class, 'logout']);
 Route::get('/dashboard', [AdminController::class, 'index'])->middleware('AdminRole');
 
 //product
-Route::get('/products', [ProductController::class, 'get_list']);
+Route::get('/products', [ProductController::class, 'get_list'])->middleware('AdminRole');
 Route::get('/add_product', [ProductController::class, 'add']);
 Route::post('/create_product', [ProductController::class, 'create']);
 Route::get('/edit_product/{product_id}', [ProductController::class, 'edit']);
 Route::post('/update_product/{product_id}', [ProductController::class, 'update']);
-Route::get('/delete_product/{product_id}', [ProductController    ::class, 'delete']);
+Route::get('/delete_product/{product_id}', [ProductController::class, 'delete']);
 
 

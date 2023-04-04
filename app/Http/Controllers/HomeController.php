@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Session;
+use DB;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -16,18 +17,19 @@ class HomeController extends Controller
 {
     public function index()
     {
-
-        return view('pages.home');
+        $products = DB::table('tbl_products')->get();
+        $manager_product = view('pages.home')->with('products', $products);
+        return view('layout')->with(['pages.home' => $manager_product, 'page_name' => 'home']);
     }
 
     public function show_login()
     {
-        return view('login');
+        return view('pages.login');
     }
 
     public function show_signup()
     {
-        return view('signup');
+        return view('pages.signup');
     }
 
     public function signup(Request $request)
@@ -70,6 +72,29 @@ class HomeController extends Controller
         return redirect('/login');
     }
 
+    public function add_to_cart($id)
+    {
+        $product = DB::table('tbl_products')->where('id', $id)->first();
+        $cart_items = session('cart_items');
+        if(!$cart_items) {
+            $cart_items = array();
+        }
+
+        if(isset($cart_items[$id])) {
+            $cart_items[$id]['quantity']++;
+        } else {
+            $cart_items[$id] = array(
+                'id' => $product->id,
+                'name' => $product->product_name,
+                'price' => $product->price,
+                'image' => $product->image,
+                'quantity' => 1
+            );
+        }
+        Session::put('cart_items', $cart_items);
+        return back();
+    }
+
     protected function create(array $data)
     {
         return User::create([
@@ -78,5 +103,11 @@ class HomeController extends Controller
             'password' => Hash::make($data['password']),
             'role' => '1'
         ]);
+    }
+
+    public function shopping_cart()
+    {
+        $cart_items = session('cart_items');
+        return view('pages.cart', ['cart_items' => $cart_items]);
     }
 }
