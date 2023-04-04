@@ -9,6 +9,7 @@ use Session;
 use DB;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
 
 // $user = Auth::user();
 // $id = Auth::id();
@@ -39,9 +40,14 @@ class HomeController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required']
         ]);
-        $data = $request->all();
-        $check = $this->create($data);
-        return redirect('dashboard');
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+        event(new Registered($user));
+        Auth::login($user);
+        return response()->noContent();
     }
 
     public function login(Request $request)
@@ -93,16 +99,6 @@ class HomeController extends Controller
         }
         Session::put('cart_items', $cart_items);
         return back();
-    }
-
-    protected function create(array $data)
-    {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'role' => '1'
-        ]);
     }
 
     public function shopping_cart()
