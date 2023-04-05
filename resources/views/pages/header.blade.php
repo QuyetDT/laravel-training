@@ -68,7 +68,12 @@
                         <li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
                         <li><a href="{{ URL::to('/shopping_cart') }}"><i class="fa fa-shopping-cart"></i>
                                 Cart</a></li>
+                        <?php $is_login = Session::get('is_login');?>
+                        @if(isset($is_login) && $is_login == 'true')
+                        <li><a href="{{ URL::to('/logout') }}"><i class="fa fa-lock"></i> Logout</a></li>
+                        @else
                         <li><a href="{{ URL::to('/login') }}"><i class="fa fa-lock"></i> Login</a></li>
+                        @endif
                     </ul>
                 </div>
             </div>
