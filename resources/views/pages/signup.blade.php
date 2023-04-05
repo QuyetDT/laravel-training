@@ -34,7 +34,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			{{csrf_field()}}
 			<label for="name">User name</label><br>
 			<input type="name" id="name" class="ggg" name="name" placeholder="USER Name">
-			<label for="email">HTML</label><br>
+			<label for="email">Email</label><br>
 			<input type="email" id="email" class="ggg" name="email" placeholder="E-MAIL">
 			@if($errors->has('email'))
 			<span class="text-alert">{{ $errors->first('email')}}</span>

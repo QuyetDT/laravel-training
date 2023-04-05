@@ -2,29 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\JustTesting;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Session;
 use DB;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
-
-// $user = Auth::user();
-// $id = Auth::id();
+use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
+    public function __construct()
+    {
+    }
+
     public function index()
     {
-        $products = DB::table('tbl_products')->get();
+        Mail::send(new JustTesting());
+
+        $products = Product::get();
         $manager_product = view('pages.home')->with('products', $products);
         return view('layout')->with(['pages.home' => $manager_product, 'page_name' => 'home']);
     }
 
     public function show_login()
     {
+        if(Auth::user()){
+            return redirect('/');
+        }
         return view('pages.login');
     }
 
@@ -44,10 +53,10 @@ class HomeController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 0
         ]);
         event(new Registered($user));
-        Auth::login($user);
-        return response()->noContent();
+        return redirect('/email_verify');
     }
 
     public function login(Request $request)
@@ -62,6 +71,7 @@ class HomeController extends Controller
             if (Auth::user()->role == 1) {
                 return redirect()->intended('/dashboard')->with('message', 'Signed in!');
             }
+            Session::put('is_login', 'true');
             return redirect()->intended('/')->with('message', 'Signed in!');
         }
         return back()->withErrors([
@@ -75,12 +85,13 @@ class HomeController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        $request->session()->forget('is_login');
         return redirect('/login');
     }
 
     public function add_to_cart($id)
     {
-        $product = DB::table('tbl_products')->where('id', $id)->first();
+        $product = Product::find($id);
         $cart_items = session('cart_items');
         if(!$cart_items) {
             $cart_items = array();
@@ -105,5 +116,10 @@ class HomeController extends Controller
     {
         $cart_items = session('cart_items');
         return view('pages.cart', ['cart_items' => $cart_items]);
+    }
+
+    public function verify_email()
+    {
+        return view('pages.verify-email');
     }
 }
